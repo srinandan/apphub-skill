@@ -23,7 +23,7 @@ This skill provides workflows and reference materials for managing Google Cloud 
 - **Assign clear ownership**: Always assign Owners, Environment, and Criticality attributes for discoverability and governance.
 
 > [!TIP]
-> Refer to [gcloud-apphub.md](file:///usr/local/google/home/srinandans/workspace/apphub-skill/references/gcloud-apphub.md#infrastructure-mapping-service-vs-workload) for a detailed mapping of Google Cloud resources to Service and Workload types.
+> Refer to [gcloud-apphub.md](./references/gcloud-apphub.md#infrastructure-mapping-service-vs-workload) for a detailed mapping of Google Cloud resources to Service and Workload types.
 
 ## Prerequisites
 
