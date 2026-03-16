@@ -11,6 +11,20 @@ metadata:
 ## Overview
 This skill provides workflows and reference materials for managing Google Cloud App Hub resources, both via the `gcloud apphub` CLI and through Terraform (`google_apphub_*` resources).
 
+### Key Concepts
+- **Applications**: Logical containers that group services and workloads to represent a business function.
+- **Services**: Logical representations of network-based capabilities (e.g., Forwarding Rules) used to access an application.
+- **Workloads**: Logical representations of computing binary executions (e.g., Instance Groups, GKE Deployments) that perform specific tasks.
+
+### Best Practices
+- **Define clear boundaries**: Categorize projects logically. Group resources that share a joint operational lifecycle or business value.
+- **Reflect business capabilities**: Define applications around business functions or end-to-end workflows, not just technical layers.
+- **Sync with Observability**: Ensure your Google Cloud Observability scopes include the same projects as your App Hub boundary.
+- **Assign clear ownership**: Always assign Owners, Environment, and Criticality attributes for discoverability and governance.
+
+> [!TIP]
+> Refer to [gcloud-apphub.md](./references/gcloud-apphub.md#infrastructure-mapping-service-vs-workload) for a detailed mapping of Google Cloud resources to Service and Workload types.
+
 ## Prerequisites
 
 The App Hub skill requires the following conditions to be met to function correctly:
@@ -30,10 +44,10 @@ If these are not met, most `gcloud apphub` commands will fail.
    gcloud apphub boundary describe --location=global 2>/dev/null
    ```
    - Store the results as `SESSION_PROJECT` and `SESSION_LOCATION`.
-   - **Verification**: Check if `apphub.googleapis.com` is enabled and if the boundary description contains a `crmNode` value. 
-   - **Action**: 
+   - **Verification**: Check if `apphub.googleapis.com` is enabled and if the boundary description contains a `crmNode` value.
+   - **Action**:
      - If the API is disabled: Inform the user and ask if they would like to enable it (`gcloud services enable apphub.googleapis.com`).
-     - If the boundary is missing `crmNode`: Ask the user: _"The App Hub boundary is not set for this project. Would you like to set it now?"_ 
+     - If the boundary is missing `crmNode`: Ask the user: _"The App Hub boundary is not set for this project. Would you like to set it now? It is recommended to align this boundary with your Google Cloud Observability scopes."_
      - If they agree, run: `gcloud apphub boundary update --crm-node="projects/${SESSION_PROJECT}" --location=global --project=${SESSION_PROJECT}`.
 
 2. **Parse** the user's request to identify the resource and action.
@@ -50,13 +64,14 @@ If these are not met, most `gcloud apphub` commands will fail.
        - **Explain**: _"Regional applications support workloads and services from a single region. Global applications support resources from multiple regions and the GCP global region."_
        - **If Regional**: State: _"I will use the region `${SESSION_LOCATION}`. Would you like to use a different region?"_
        - **If Global**: Use `--location=global`.
+     - **Name Suggestion**: Suggest a name that reflects **business capability** (e.g., "Order Fulfillment") rather than technical layers.
      - **Attributes Selection**:
        - Ask: _"Would you like to provide optional attributes such as **business owners**, **criticality**, **developer owners**, or **environment type**?"_
        - If yes, collect details and include the relevant flags:
-         - `--business-owners=[display-name=NAME],[email=EMAIL]`
-         - `--developer-owners=[display-name=NAME],[email=EMAIL]`
-         - `--criticality-type` (MISSION_CRITICAL, HIGH, MEDIUM, LOW)
-         - `--environment-type` (PRODUCTION, STAGING, TEST, DEVELOPMENT)
+         - `--business-owners=[display-name=NAME],[email=EMAIL]` (foster accountability)
+         - `--developer-owners=[display-name=NAME],[email=EMAIL]` (foster accountability)
+         - `--criticality-type` (MISSION_CRITICAL, HIGH, MEDIUM, LOW; inform monitoring priorities)
+         - `--environment-type` (PRODUCTION, STAGING, TEST, DEVELOPMENT; lifecycle stage)
 7. **Application Deletion Flow**:
    - If the user asks to delete an App Hub application:
      - **Pre-cleanup**: You must delete all services and workloads within the application first.
