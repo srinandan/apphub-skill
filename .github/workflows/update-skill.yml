@@ -30,12 +30,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build .skill file
-        run: zip -r agent-registry.skill SKILL.md references/adk-docs.md
+        run: zip -r apphub-skill.skill SKILL.md references/terraform-apphub.md references/gcloud-apphub.md scripts/delete-all-services.sh scripts/delete-all-workloads.sh
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add agent-registry.skill
-          git diff --staged --quiet || git commit -m "chore: regenerate agent-registry.skill"
+          git add apphub-skill.skill
+          git diff --staged --quiet || git commit -m "chore: regenerate apphub-skill.skill"
           git push
