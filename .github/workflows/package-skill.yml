@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This action automatically updates the agent-registry.skill file
+# This action automatically updates the apphub-skill.skill file
 name: Package Skill
 
 on:
@@ -49,5 +49,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: agent-registry.skill
+          files: apphub-skill.skill
           generate_release_notes: true
