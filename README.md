@@ -11,7 +11,6 @@ A skill for Gemini and AI agents to manage Google Cloud App Hub resources using 
 - **Automated Setup**: Verifies `apphub.googleapis.com` API and project boundary configuration at the start of every session.
 - **Resource Management**: Create, list, describe, and delete App Hub Applications, Services, and Workloads.
 - **Interactive Application Creation**: Guides you through selecting regional vs. global applications and collecting optional attributes (owners, environment, criticality).
-- **Discovered Assets**: Search and onboard discovered infrastructure assets (GKE services, deployments, etc.) into your applications.
 - **Automated Cleanup**: Intelligently deletes all associated services and workloads before attempting to delete an application.
 - **Terraform Support**: Generates HCL code for App Hub resources based on your requirements.
 - **Project Boundaries**: Proactively assists in setting or updating project boundaries.
@@ -36,8 +35,6 @@ Once installed, you can talk to Gemini in natural language:
 
 -   *"List my App Hub applications in the global region"*
 -   *"Create a global application called instavibe-prod"*
--   *"Are there any discovered services in us-central1 that aren't registered?"*
--   *"Register the discovered workload apphub-001 into the ecommerce-app"*
 -   *"Delete the payment-service from the checkout application"*
 -   *"Delete the entire legacy-app application"* (This will automatically clean up its services and workloads first)
 -   *"Show me the boundary configuration for my project"*

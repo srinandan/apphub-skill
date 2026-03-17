@@ -1,6 +1,6 @@
 ---
 name: apphub-skill
-description: Manage Google Cloud App Hub resources and write Terraform configs for App Hub. Use this skill when asked to list applications, register services/workloads, discover assets, or generate Terraform code for App Hub.
+description: Manage Google Cloud App Hub resources and write Terraform configs for App Hub. Use this skill when asked to list applications, register services/workloads, or generate Terraform code for App Hub.
 metadata:
   author: srinandan
   version: "0.1"
@@ -40,7 +40,7 @@ If these are not met, most `gcloud apphub` commands will fail.
    ```bash
    gcloud config get-value project 2>/dev/null
    gcloud config get-value compute/region 2>/dev/null
-   gcloud services list --enabled --filter="name:apphub.googleapis.com" 2>/dev/null
+   gcloud services list --enabled --filter="name=apphub.googleapis.com" 2>/dev/null
    gcloud apphub boundary describe --location=global 2>/dev/null
    ```
    - Store the results as `SESSION_PROJECT` and `SESSION_LOCATION`.
@@ -102,22 +102,10 @@ For detailed Terraform examples and available arguments, read [references/terraf
 | `roles/apphub.viewer` | Read only access |
 
 ## Common Tasks
-*   **Listing Discovered Assets:** Run `gcloud apphub discovered-services list --location=<LOCATION>` to find services that can be onboarded to App Hub.
-*   **Filtering Discovered Assets:** Search for services by service reference using `--filter="SERVICE_REFERENCE:*<PATTERN>"`.
-*   **Filtering Workloads by Functional Type:** Search for workloads by functional type (e.g., `AGENT`, `MCP_SERVER`) using `--filter="workloadProperties.functionalType:<TYPE>"`.
-*   **Looking up Discovered Assets:** Find exactly which App Hub asset corresponds to a Google Cloud resource URI using `gcloud apphub discovered-workloads lookup --uri=<URI>`.
 *   **Creating Applications:** An application acts as a container. Create it using `gcloud apphub applications create`. Follow the **Application Creation Interaction** guidelines for selecting the location and attributes.
 *   **Registering Workloads/Services:** Register workloads and services into an application, pointing to discovered workloads/services.
     *   **Constraint**: Global resources must be registered with global applications. Regional resources can be registered with either regional (if in the same region) or global applications.
     *   **Example:** `gcloud apphub applications services create my-service --application=my-app --location=us-central1 --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 --project=apphub-srinandans-test`
-*   **Discovering Apps from Labels:** Use the discovery script to group resources and manage App Hub applications based on existing labels.
-    *   **Logic:**
-        1.  If the user's label key contains the phrase **"app"** (e.g., `appid`, `my-app`, `application`): **Proactively** run the script:
-            ```bash
-            ./scripts/discover-apps-from-labels.sh --label-key=<USER_SPECIFIED_KEY> --apply
-            ```
-        2.  If the label key does **NOT** contain "app": **Stop and ask** the user if they would like to use the App Hub discovery script for that specific label.
-        3.  **Validation Step:** The script will automatically perform an App Hub `lookup` for each resource found via labels. Only resources successfully looked up as **Discovered Services** or **Discovered Workloads** will be included in the Application.
 
 ## Error Handling
 

@@ -6,12 +6,11 @@ App Hub provides an application-centric view of Google Cloud infrastructure. It 
 - **Applications**: Logical containers that group services and workloads to represent a business function.
 - **Services**: Logical representations of network-based capabilities (e.g., Forwarding Rules) used to access an application.
 - **Workloads**: Logical representations of computing binary executions (e.g., Instance Groups, GKE Deployments) that perform specific tasks.
-*   **Discovered Services/Workloads:** Unregistered infrastructure assets automatically detected by App Hub that can be onboarded.
 *   **Service Projects:** Projects attached to a host project to share their resources with App Hub.
 
 ## Infrastructure Mapping (Service vs Workload)
 
-App Hub categorizes Google Cloud resources into either **Services** or **Workloads**. This mapping is used when registering discovered resources.
+App Hub categorizes Google Cloud resources into either **Services** or **Workloads**.
 
 ### Support as Services
 Services represent network-based capabilities used to access an application.
@@ -96,50 +95,6 @@ App Hub applications can be either **regional** (supporting resources from one r
 ### Workloads
 *   `gcloud apphub applications workloads create <WORKLOAD_ID> --application=<APP_ID> --location=<LOCATION> --discovered-workload=<DISCOVERED_WORKLOAD_ID>`
 *   `gcloud apphub applications workloads list --application=<APP_ID> --location=<LOCATION>`
-
-### Discovered Assets
-*   `gcloud apphub discovered-services list --location=<LOCATION>`
-*   `gcloud apphub discovered-workloads list --location=<LOCATION>`
-
-#### Lookup Assets
-You can look up a discovered service or workload by providing its underlying Google Cloud resource URI.
-
-*   **Service Lookup Example:**
-    ```bash
-    gcloud apphub discovered-services lookup \
-        --location=us-central1 \
-        --uri="//run.googleapis.com/projects/my-project/locations/us-central1/services/my-service"
-    ```
-
-*   **Workload Lookup Example:**
-    ```bash
-    gcloud apphub discovered-workloads lookup \
-        --location=us-central1 \
-        --uri="//spanner.googleapis.com/projects/432423772502/instances/instavibe-graph-instance"
-    ```
-
-#### Advanced Filtering
-You can search for discovered services by their underlying service reference (CAIS URI format).
-
-Example: Search for services with "emailservice" in their name:
-```bash
-gcloud apphub discovered-services list \
-    --location=us-central1 \
-    --project=my-project \
-    --filter="SERVICE_REFERENCE:*emailservice"
-```
-
-Example: Search for workloads by functional type (`AGENT` or `MCP_SERVER`):
-```bash
-gcloud apphub discovered-workloads list \
-    --location=us-central1 \
-    --project=my-project \
-    --filter="workloadProperties.functionalType:AGENT"
-```
-
-The `serviceReference` follows the CAIS (Cloud Asset Inventory Service) convention.
-Format: `//<SERVICE_NAME>.googleapis.com/projects/<PROJECT_ID>/locations/<LOCATION>/services/<SERVICE_ID>`
-Example: `//run.googleapis.com/projects/432423772502/locations/us-central1/services/sri-test-adc-cloudrun`
 
 ### Service Projects
 *   `gcloud apphub service-projects create <PROJECT_ID>` (Attaches a service project to the host project)
