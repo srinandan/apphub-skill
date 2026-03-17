@@ -112,6 +112,31 @@ If these are not met, most `gcloud apphub` commands will fail.
           - **Location**: Use the region (e.g., `us-central1`).
        4. **Follow-up**: Ask the user: _"Would you like to register any of these resources? You can use the IDs from the table to register them individually or in bulk."_
 
+## App Hub Dashboards
+
+This skill provides scripts to generate markdown dashboards for App Hub resources. These are useful for getting a high-level overview of your application ecosystem.
+
+### 1. Applications Dashboard
+Shows all App Hub applications in the project (global and specified region).
+```bash
+./scripts/application-dashboard.sh [--project=PROJECT_ID] [--location=REGION]
+```
+
+### 2. Services Dashboard
+Shows all registered services across all applications in the project.
+```bash
+./scripts/service-dashboard.sh [--project=PROJECT_ID] [--location=REGION]
+```
+
+### 3. Workloads Dashboard
+Shows all registered workloads across all applications in the project.
+```bash
+./scripts/workload-dashboard.sh [--project=PROJECT_ID] [--location=REGION]
+```
+
+### Interaction Guideline
+If the user asks for a **"dashboard"** or to **"list all services/workloads"** across the project, run the corresponding script and display the markdown output.
+
 ## Using gcloud for App Hub
 When the user asks to manage App Hub resources directly (e.g., list applications, register a service, find discovered workloads), you should use the `mcp_gcloud_run_gcloud_command` tool if available, or the generic terminal command execution tool to run `gcloud apphub` commands.
 
