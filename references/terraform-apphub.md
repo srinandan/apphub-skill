@@ -7,6 +7,9 @@ App Hub can be managed via Terraform using the `google` provider.
 ### `google_apphub_application`
 Creates a logical application. App Hub applications can be **regional** (supporting resources from one region) or **global** (supporting resources from multiple regions, including the GCP global region).
 
+> [!IMPORTANT]
+> **Global Application Constraint**: Global resources (e.g., Global Forwarding Rules) must be registered with a global application (`location = "global"`). Refer to the `google_apphub_service` and `google_apphub_workload` sections for details.
+
 ```hcl
 resource "google_apphub_application" "example" {
   location       = "us-central1" # Use "global" for global applications
@@ -39,8 +42,10 @@ Registers a network service to an application.
 ```hcl
 resource "google_apphub_service" "example" {
   location       = "us-central1"
-  application_id = google_apphub_application.example.application_id
   service_id     = "my-service"
+  
+  # Constraint: If the underlying resource is global, the application must be global.
+  # location must match the application's location.
   
   discovered_service = "projects/.../locations/us-central1/discoveredServices/..."
   display_name       = "My Service"
