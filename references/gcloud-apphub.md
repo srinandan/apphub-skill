@@ -65,14 +65,18 @@ Always assign mutable **attributes** to your applications, services, and workloa
 Use `gcloud apphub` to manage these resources.
 
 ### Applications
-App Hub applications can be either **regional** (supporting resources from one region) or **global** (supporting resources from multiple regions).
+App Hub applications can be either **regional** (supporting resources from one region) or **global** (supporting resources from multiple regions, including the GCP global region).
 
-*   **Create Global Application:** `gcloud apphub applications create <APP_ID> --location=global --scope=GLOBAL --display-name="<NAME>"`
-*   **Create Regional Application:** `gcloud apphub applications create <APP_ID> --location=<REGION> --scope=REGIONAL --display-name="<NAME>"`
+> [!IMPORTANT]
+> **Global Application Required for Global Resources**: Any Google Cloud resource that is globally scoped (e.g., Global Forwarding Rules, Global Cloud Run services) can **ONLY** be registered within an App Hub application that is also globally scoped (`--location=global`).
+
+*   **Create Global Application:** `gcloud apphub applications create <APP_ID> --location=global --scope-type=GLOBAL --display-name="<NAME>"`
+*   **Create Regional Application:** `gcloud apphub applications create <APP_ID> --location=<REGION> --scope-type=REGIONAL --display-name="<NAME>"`
 *   **Create with Attributes:**
     ```bash
     gcloud apphub applications create <APP_ID> \
         --location=global \
+        --scope-type=GLOBAL \
         --display-name="My App" \
         --environment-type=PRODUCTION \
         --criticality-type=HIGH \
@@ -85,6 +89,7 @@ App Hub applications can be either **regional** (supporting resources from one r
 
 ### Services
 *   `gcloud apphub applications services create <SERVICE_ID> --application=<APP_ID> --location=<LOCATION> --discovered-service=<DISCOVERED_SERVICE_ID>`
+*   **Constraint**: Global resources must be registered with global applications.
 *   **Example:** `gcloud apphub applications services create my-service --application=my-app --location=us-central1 --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 --project=apphub-srinandans-test`
 *   `gcloud apphub applications services list --application=<APP_ID> --location=<LOCATION>`
 

@@ -62,6 +62,7 @@ If these are not met, most `gcloud apphub` commands will fail.
      - **Location Selection**:
        - **Stop** and ask: _"Would you like to create a **regional** or **global** application?"_
        - **Explain**: _"Regional applications support workloads and services from a single region. Global applications support resources from multiple regions and the GCP global region."_
+       - **Constraint**: **Global resources** (e.g., global forwarding rules, global Cloud Run services) can **only** be registered with **global applications**.
        - **If Regional**: State: _"I will use the region `${SESSION_LOCATION}`. Would you like to use a different region?"_
        - **If Global**: Use `--location=global`.
      - **Name Suggestion**: Suggest a name that reflects **business capability** (e.g., "Order Fulfillment") rather than technical layers.
@@ -107,7 +108,16 @@ For detailed Terraform examples and available arguments, read [references/terraf
 *   **Looking up Discovered Assets:** Find exactly which App Hub asset corresponds to a Google Cloud resource URI using `gcloud apphub discovered-workloads lookup --uri=<URI>`.
 *   **Creating Applications:** An application acts as a container. Create it using `gcloud apphub applications create`. Follow the **Application Creation Interaction** guidelines for selecting the location and attributes.
 *   **Registering Workloads/Services:** Register workloads and services into an application, pointing to discovered workloads/services.
+    *   **Constraint**: Global resources must be registered with global applications. Regional resources can be registered with either regional (if in the same region) or global applications.
     *   **Example:** `gcloud apphub applications services create my-service --application=my-app --location=us-central1 --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 --project=apphub-srinandans-test`
+*   **Discovering Apps from Labels:** Use the discovery script to group resources and manage App Hub applications based on existing labels.
+    *   **Logic:**
+        1.  If the user's label key contains the phrase **"app"** (e.g., `appid`, `my-app`, `application`): **Proactively** run the script:
+            ```bash
+            ./scripts/discover-apps-from-labels.sh --label-key=<USER_SPECIFIED_KEY> --apply
+            ```
+        2.  If the label key does **NOT** contain "app": **Stop and ask** the user if they would like to use the App Hub discovery script for that specific label.
+        3.  **Validation Step:** The script will automatically perform an App Hub `lookup` for each resource found via labels. Only resources successfully looked up as **Discovered Services** or **Discovered Workloads** will be included in the Application.
 
 ## Error Handling
 
