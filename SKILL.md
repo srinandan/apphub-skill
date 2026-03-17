@@ -73,7 +73,24 @@ If these are not met, most `gcloud apphub` commands will fail.
          - `--developer-owners=[display-name=NAME],[email=EMAIL]` (foster accountability)
          - `--criticality-type` (MISSION_CRITICAL, HIGH, MEDIUM, LOW; inform monitoring priorities)
          - `--environment-type` (PRODUCTION, STAGING, TEST, DEVELOPMENT; lifecycle stage)
-7. **Application Deletion Flow**:
+7. **Service and Workload Registration Interaction**:
+   - If the user asks to register a service or workload:
+     - **Attribute Inheritance**:
+       - Silently run `gcloud apphub applications describe [APP_ID]` to check for existing attributes.
+       - If attributes (environment, criticality, owners) are set on the application:
+         - **Ask**: _"The parent application has attributes set (e.g., Environment: PRODUCTION). Would you like to reuse these attributes for this [Service/Workload]?"_
+         - If yes, use the application's attributes in the creation flags for the service/workload.
+         - If no, proceed with standard registration without those specific flags (unless the user manually specified them).
+     - **Bulk Registration Logic**:
+       - If the user asks to register multiple resources (e.g., *"Onboard all services matching 'api-*'"*):
+         1. **List and Filter**: Run `gcloud apphub discovered-services list` (or workloads) with the appropriate location and filter.
+         2. **Propose Batch**: Present a concise list of found resources and their proposed registration IDs.
+         3. **Attribute Inheritance**: Run the inheritance check above *once* for the entire batch. Ask: *"Would you like to apply the parent application's attributes to ALL of these resources?"*
+         4. **Approval**: Obtain a single confirmation: *"Ready to register all [N] resources? (yes/no)"*
+         5. **Execute**: Run the commands sequentially.
+
+
+8. **Application Deletion Flow**:
    - If the user asks to delete an App Hub application:
      - **Pre-cleanup**: You must delete all services and workloads within the application first.
      - **Execute Scripts**: Run the following scripts in order before deleting the application:
@@ -82,6 +99,18 @@ If these are not met, most `gcloud apphub` commands will fail.
        ./scripts/delete-all-workloads.sh ${SESSION_PROJECT} ${APP_ID}
        ```
      - **Final Deletion**: Only after the scripts complete successfully, proceed with the `gcloud apphub applications delete` command.
+
+9. **Discovered Resources Dashboard Interaction**:
+   - If the user uses keywords like **"dashboard"**, **"discovered"**, or **"onboard"** (e.g., *"show me a dashboard for discovered resources in app hub"*):
+     - **Action**:
+       1. Run `gcloud apphub discovered-services list --location=[LOCATION]` and `gcloud apphub discovered-workloads list --location=[LOCATION]`.
+       2. **Consolidate** the output into a single Markdown table.
+       3. **Formatting Rules**:
+          - **ID**: Extract the short ID from the resource name (e.g., `apphub-008...`).
+          - **Type**: "Service" or "Workload".
+          - **Resource Name**: Extract the terminal segment of the underlying URI (e.g., if URI is `.../services/frontend`, use `frontend`).
+          - **Location**: Use the region (e.g., `us-central1`).
+       4. **Follow-up**: Ask the user: _"Would you like to register any of these resources? You can use the IDs from the table to register them individually or in bulk."_
 
 ## Using gcloud for App Hub
 When the user asks to manage App Hub resources directly (e.g., list applications, register a service, find discovered workloads), you should use the `mcp_gcloud_run_gcloud_command` tool if available, or the generic terminal command execution tool to run `gcloud apphub` commands.
@@ -103,7 +132,7 @@ For detailed Terraform examples and available arguments, read [references/terraf
 
 ## Common Tasks
 *   **Creating Applications:** An application acts as a container. Create it using `gcloud apphub applications create`. Follow the **Application Creation Interaction** guidelines for selecting the location and attributes.
-*   **Registering Workloads/Services:** Register workloads and services into an application, pointing to discovered workloads/services.
+*   **Registering Workloads/Services:** Register workloads and services into an application, pointing to discovered workloads/services. Follow the **Service and Workload Registration Interaction** guidelines for attribute inheritance.
     *   **Constraint**: Global resources must be registered with global applications. Regional resources can be registered with either regional (if in the same region) or global applications.
     *   **Example:** `gcloud apphub applications services create my-service --application=my-app --location=us-central1 --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 --project=apphub-srinandans-test`
 

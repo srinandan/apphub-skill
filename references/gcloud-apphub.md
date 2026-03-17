@@ -89,11 +89,30 @@ App Hub applications can be either **regional** (supporting resources from one r
 ### Services
 *   `gcloud apphub applications services create <SERVICE_ID> --application=<APP_ID> --location=<LOCATION> --discovered-service=<DISCOVERED_SERVICE_ID>`
 *   **Constraint**: Global resources must be registered with global applications.
-*   **Example:** `gcloud apphub applications services create my-service --application=my-app --location=us-central1 --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 --project=apphub-srinandans-test`
+*   **Attributes Support**: Services support the same attributes as applications (`--environment-type`, `--criticality-type`, `--business-owners`, `--developer-owners`, `--operator-owners`).
+*   **Example with Attributes:**
+    ```bash
+    gcloud apphub applications services create my-service \
+        --application=my-app \
+        --location=us-central1 \
+        --discovered-service=apphub-00000000-0000-0000-0f5a-15d1c21f4100 \
+        --environment-type=PRODUCTION \
+        --criticality-type=HIGH
+    ```
 *   `gcloud apphub applications services list --application=<APP_ID> --location=<LOCATION>`
 
 ### Workloads
 *   `gcloud apphub applications workloads create <WORKLOAD_ID> --application=<APP_ID> --location=<LOCATION> --discovered-workload=<DISCOVERED_WORKLOAD_ID>`
+*   **Attributes Support**: Workloads support the same attributes as applications (`--environment-type`, `--criticality-type`, `--business-owners`, `--developer-owners`, `--operator-owners`).
+*   **Example with Attributes:**
+    ```bash
+    gcloud apphub applications workloads create my-workload \
+        --application=my-app \
+        --location=us-central1 \
+        --discovered-workload=apphub-00000000-0000-0000-0f5a-15d1c21f4100 \
+        --environment-type=STAGING \
+        --criticality-type=MEDIUM
+    ```
 *   `gcloud apphub applications workloads list --application=<APP_ID> --location=<LOCATION>`
 
 ### Service Projects

@@ -35,6 +35,8 @@ Once installed, you can talk to Gemini in natural language:
 
 -   *"List my App Hub applications in the global region"*
 -   *"Create a global application called instavibe-prod"*
+-   *"Show me a dashboard for discovered resources in app hub"*
+-   *"Onboard all discovered services in us-central1 that match 'api-*' into the ecommerce-app"*
 -   *"Delete the payment-service from the checkout application"*
 -   *"Delete the entire legacy-app application"* (This will automatically clean up its services and workloads first)
 -   *"Show me the boundary configuration for my project"*
