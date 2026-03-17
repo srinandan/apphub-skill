@@ -43,7 +43,7 @@ jobs:
           echo "Injected version: ${VERSION}"
 
       - name: Build .skill file
-        run: zip -r apphub-skill.skill SKILL.md references/terraform-apphub.md references/gcloud-apphub.md scripts/delete-all-services.sh scripts/delete-all-workloads.sh
+        run: zip -r apphub-skill.skill SKILL.md references/ scripts/
 
 
       - name: Create GitHub Release
