@@ -17,12 +17,39 @@ A skill for Gemini and AI agents to manage Google Cloud App Hub resources using 
 
 ## Installation
 
-Clone this repository and install the skill using the `agents-cli` tool:
+### Method 1: GitHub CLI (Recommended)
+
+Install the skill using the GitHub CLI (`gh`):
 
 ```bash
-git clone https://github.com/srinandan/apphub-skill.git
-cd apphub-skill
-agents-cli setup
+gh skill install srinandan/apphub-skill --agent gemini
+```
+
+During installation, you will be guided through the following options:
+
+```text
+Select skill(s) to install: [root] apphub-skill - Manage Google Cloud App Hub resources and write Terraform configs for App Hub. Use this skill when asked to list applications, register services/w...
+```
+
+```text
+? Installation scope: Global: install in home directory (available everywhere) 
+```
+
+### Method 2: Manual Installation
+
+1. Download the source code for the desired release (e.g., `v0.5.0`):
+
+```bash
+curl -OL https://github.com/srinandan/apphub-skill/archive/refs/tags/v0.5.0.zip
+```
+
+2. Unzip and move the folder to your skills directory:
+
+```bash
+unzip v0.5.0.zip
+mkdir -p ~/.gemini/skills
+mv apphub-skill-0.5.0 ~/.gemini/skills/apphub-skill
+rm v0.5.0.zip
 ```
 
 ## Usage Examples
