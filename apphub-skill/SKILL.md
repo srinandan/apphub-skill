@@ -1,6 +1,7 @@
 ---
 name: apphub-skill
 description: Manage Google Cloud App Hub resources and write Terraform configs for App Hub. Use this skill when asked to list applications, register services/workloads, or generate Terraform code for App Hub.
+license: Apache-2.0
 metadata:
   author: srinandan
   version: "0.1"

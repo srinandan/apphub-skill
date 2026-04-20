@@ -17,16 +17,12 @@ A skill for Gemini and AI agents to manage Google Cloud App Hub resources using 
 
 ## Installation
 
-`apphub-skill` is an AI Agent Skill that can be used with your favorite CLI. Run this script to download and install the latest version:
+Clone this repository and install the skill using the `agents-cli` tool:
 
 ```bash
-curl -L https://raw.githubusercontent.com/srinandan/apphub-skill/main/installSkill.sh | sh -
-```
-
-To install a specific version or branch, set the `SKILL_VERSION` environment variable:
-
-```bash
-curl -L https://raw.githubusercontent.com/srinandan/apphub-skill/main/installSkill.sh | SKILL_VERSION=v1.0.0 sh -
+git clone https://github.com/srinandan/apphub-skill.git
+cd apphub-skill
+agents-cli setup
 ```
 
 ## Usage Examples
