@@ -60,6 +60,10 @@ If these are not met, most `gcloud apphub` commands will fail.
 
 6. **Application Creation Interaction**:
    - If the user asks to create an App Hub application:
+     - **Scope Type (Mandatory)**: 
+       - When creating an application, the `--scope-type` flag is **mandatory**.
+       - If the location is "global", then `--scope-type=GLOBAL`.
+       - If any other region, then `--scope-type=REGIONAL`.
      - **Location Selection**:
        - **Stop** and ask: _"Would you like to create a **regional** or **global** application?"_
        - **Explain**: _"Regional applications support workloads and services from a single region. Global applications support resources from multiple regions and the GCP global region."_
